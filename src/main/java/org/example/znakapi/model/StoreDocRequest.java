@@ -9,6 +9,7 @@ import lombok.ToString;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -16,9 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StoreDocRequest {
-    @NotEmpty
+    @NotNull
+    @Size(min = 9, max = 9, message = "size must be 9")
     private String seller;
-    @NotEmpty
+    @NotNull
+    @Size(min = 9, max = 9, message = "size must be 9")
     private String customer;
     @NotEmpty
     private List<@Valid Product> products;

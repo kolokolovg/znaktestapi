@@ -18,6 +18,6 @@ public class Product {
     private String name;
 
     @NotNull
-    @Size(min = 13, max = 13)
+    @Size(min = 13, max = 13, message = "code length must be 13")
     private String code;
 }

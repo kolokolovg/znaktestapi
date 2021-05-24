@@ -66,7 +66,7 @@ class ZnakApiControllerTest {
                 .andReturn().getResponse();
 
         Assertions.assertEquals(200, response.getStatus());
-        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{products[0].code=size must be between 13 and 13, products[1].code=size must be between 13 and 13}")).getJson(),
+        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{products[0].code=code length must be 13, products[1].code=code length must be 13}")).getJson(),
                 response.getContentAsString());
     }
 
@@ -98,7 +98,24 @@ class ZnakApiControllerTest {
                 .andReturn().getResponse();
 
         Assertions.assertEquals(200, response.getStatus());
-        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{seller=must not be empty}")).getJson(),
+        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{seller=must not be null}")).getJson(),
+                response.getContentAsString());
+    }
+
+    @Test
+    void checkBadSizeSeller() throws Exception {
+        var req = new StoreDocRequest("1235351", "648563524",
+                List.of(new Product("milk", "2364758363546"),
+                        new Product("water", "3656352437590")));
+        var request = jsonRequest.write(req).getJson();
+        MockHttpServletResponse response = mockMvc.perform(
+                post("/storedoc/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{seller=size must be 9}")).getJson(),
                 response.getContentAsString());
     }
 
@@ -115,7 +132,24 @@ class ZnakApiControllerTest {
                 .andReturn().getResponse();
 
         Assertions.assertEquals(200, response.getStatus());
-        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{customer=must not be empty}")).getJson(),
+        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{customer=must not be null}")).getJson(),
+                response.getContentAsString());
+    }
+
+    @Test
+    void checkBadCustomerSize() throws Exception {
+        var req = new StoreDocRequest("123534251", "64856352114",
+                List.of(new Product("milk", "2364758363546"),
+                        new Product("water", "3656352437590")));
+        var request = jsonRequest.write(req).getJson();
+        MockHttpServletResponse response = mockMvc.perform(
+                post("/storedoc/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{customer=size must be 9}")).getJson(),
                 response.getContentAsString());
     }
 
@@ -130,7 +164,7 @@ class ZnakApiControllerTest {
                 .andReturn().getResponse();
 
         Assertions.assertEquals(200, response.getStatus());
-        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{seller=must not be empty, customer=must not be empty, products=must not be empty}")).getJson(),
+        Assertions.assertEquals(jsonResponse.write(new StoreDocResponse(2L, "{seller=must not be null, customer=must not be null, products=must not be empty}")).getJson(),
                 response.getContentAsString());
     }
 
